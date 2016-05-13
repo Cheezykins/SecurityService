@@ -13,9 +13,8 @@
 
 $api = app('Dingo\Api\Routing\Router');
 
-$api->version('v1', function($api) {
+$api->version('v1', function ($api) {
     $api->post('password/secure', 'App\Api\V1\MainController@secure');
     $api->post('password/changeif', 'App\Api\V1\MainController@changeif');
     $api->post('password/verify', 'App\Api\V1\MainController@verify');
 });
-

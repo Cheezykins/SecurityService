@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Api\V1;
 
 use App\HashSigner;
@@ -8,11 +7,10 @@ use Illuminate\Http\Request;
 
 class MainController extends Controller
 {
-
     public function secure(Request $request)
     {
         return [
-            'saved' => HashSigner::create($request->input('password'))->getHash()
+            'saved' => HashSigner::create($request->input('password'))->getHash(),
         ];
     }
 
@@ -23,19 +21,16 @@ class MainController extends Controller
         $old = new HashSigner($oldSignature);
 
         if ($old->validate($request->input('password'))) {
-
             $newHash = HashSigner::create($request->input('newpassword'));
             $old->invalidate();
-            return [
-                'saved' => $newHash->getHash()
-            ];
 
+            return [
+                'saved' => $newHash->getHash(),
+            ];
         } else {
-
             return [
-                'verified' => false
+                'verified' => false,
             ];
-
         }
     }
 
@@ -44,7 +39,7 @@ class MainController extends Controller
         $hash = new HashSigner($request->input('signature'));
 
         return [
-            'verified' => $hash->validate($request->input('password'))
+            'verified' => $hash->validate($request->input('password')),
         ];
     }
 }
