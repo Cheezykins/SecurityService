@@ -29,11 +29,9 @@ class GenerateHashes extends Command
      */
     public function handle()
     {
-
         $hashes = Redis::get('hash_max');
 
-        if ($hashes === null)
-        {
+        if ($hashes === null) {
             $start = '';
         } else {
             $start = $hashes;
@@ -45,10 +43,9 @@ class GenerateHashes extends Command
 
         $bar = $this->output->createProgressBar($hashCount);
 
-        $this->info("Generating {$hashCount} hashes starting from {$hasher}" . PHP_EOL);
-        
-        for($i = 0; $i < $hashCount; $i ++)
-        {
+        $this->info("Generating {$hashCount} hashes starting from {$hasher}".PHP_EOL);
+
+        for ($i = 0; $i < $hashCount; $i++) {
             Redis::sadd('hashes', $hasher);
             $hasher->increment();
             if ($i % 1000 == 0) {
@@ -58,9 +55,8 @@ class GenerateHashes extends Command
         $bar->setProgress($hashCount);
         $this->line(PHP_EOL);
 
-        $this->info("Hashes generated, new highest hash is {$hasher}" . PHP_EOL);
+        $this->info("Hashes generated, new highest hash is {$hasher}".PHP_EOL);
 
         Redis::set('hash_max', $hasher);
-
     }
 }

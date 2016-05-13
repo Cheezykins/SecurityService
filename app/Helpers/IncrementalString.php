@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Helpers;
-
 
 class IncrementalString
 {
@@ -15,7 +13,8 @@ class IncrementalString
 
     /**
      * IncrementalString constructor.
-     * @param string $start
+     *
+     * @param string      $start
      * @param string|null $alphabet
      */
     public function __construct($start = '', $alphabet = null)
@@ -48,9 +47,6 @@ class IncrementalString
         $this->setPosition();
     }
 
-    /**
-     *
-     */
     protected function setPosition()
     {
         $this->position = \array_search(end($this->current), $this->alphabet);
@@ -58,6 +54,7 @@ class IncrementalString
 
     /**
      * @param array|null $array
+     *
      * @return array
      */
     protected function incrementArray($array)
@@ -76,6 +73,7 @@ class IncrementalString
             $array = $this->incrementArray($array);
         }
         $array[] = $this->alphabet[$key];
+
         return $array;
     }
 
@@ -89,10 +87,8 @@ class IncrementalString
         return \str_pad(\implode('', $this->current), $length, $this->alphabet[0], STR_PAD_LEFT);
     }
 
-
     public function __toString()
     {
         return \implode('', $this->current);
     }
-
 }

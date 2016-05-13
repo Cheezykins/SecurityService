@@ -1,14 +1,11 @@
 <?php
 
-
 namespace App;
-
 
 use Illuminate\Support\Facades\Redis;
 
 class HashSigner
 {
-
     const HASH_DIVIDER = '|';
     protected $hash;
     protected $reference;
@@ -16,6 +13,7 @@ class HashSigner
 
     /**
      * HashSigner constructor.
+     *
      * @param string|null $hash
      */
     public function __construct($hash = null)
@@ -27,6 +25,7 @@ class HashSigner
 
     /**
      * @param string $password
+     *
      * @return HashSigner
      */
     public static function create($password)
@@ -41,16 +40,14 @@ class HashSigner
             throw new \LogicException('Hash Error');
         }
 
-        Redis::set('hash_' . $reference, $secret);
-        return new self($hash . self::HASH_DIVIDER . $reference);
+        Redis::set('hash_'.$reference, $secret);
+
+        return new self($hash.self::HASH_DIVIDER.$reference);
     }
 
-    /**
-     *
-     */
     public function invalidate()
     {
-        Redis::del('hash_' . $this->reference);
+        Redis::del('hash_'.$this->reference);
     }
 
     /**
@@ -58,7 +55,7 @@ class HashSigner
      */
     public function getHash()
     {
-        return $this->hash . self::HASH_DIVIDER . $this->reference;
+        return $this->hash.self::HASH_DIVIDER.$this->reference;
     }
 
     /**
@@ -73,7 +70,7 @@ class HashSigner
         list($hash, $reference) = \explode(self::HASH_DIVIDER, $hash);
         $this->hash = $hash;
         $this->reference = $reference;
-        $secret = Redis::get('hash_' . $reference);
+        $secret = Redis::get('hash_'.$reference);
 
         if ($secret === null) {
             throw new \InvalidArgumentException('Invalid Hash');
@@ -83,16 +80,19 @@ class HashSigner
 
     /**
      * @param string $pass
+     *
      * @return bool
      */
     public function validate($pass)
     {
         $checkHash = \hash_hmac('sha256', $pass, $this->secret);
+
         return \password_verify($checkHash, $this->hash);
     }
 
     /**
      * @param string $hash
+     *
      * @return bool
      */
     protected function validateHash($hash)
@@ -100,7 +100,7 @@ class HashSigner
         if (preg_match('/^.+\|[a-zA-Z0-9]+$/', $hash) == 1) {
             return true;
         }
+
         return false;
     }
-
 }
